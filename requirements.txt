@@ -1,4 +1,6 @@
 # requirements.txt
+# NOTA: Use python install_deps.py para instalar tudo corretamente
+# pip install -r requirements.txt pode falhar com rosu-pp-py
 
 aiohttp~=3.10.5
 asyncpg
@@ -10,7 +12,10 @@ Quart~=0.19.6
 Werkzeug~=3.0.4
 discord-webhook[async]==1.3.1
 geoip2==4.8.1
-git+https://github.com/unclem2/rosu-pp-py
 pytest~=8.3.4
 requests~=2.32.3
 javaobj-py3~=0.4.4
+
+# DEPENDÊNCIAS ESPECIAIS - Instaladas pelo install_deps.py:
+# maturin>=1.0.0
+# git+https://github.com/unclem2/rosu-pp-py
