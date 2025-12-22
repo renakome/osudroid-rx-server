@@ -7,11 +7,11 @@ import subprocess
 import sys
 import os
 
-def run_command(cmd, description, shell=False):
+def run_command(cmd, description, shell=False, check=True):
     """Execute command and show result"""
     print(f"🔧 {description}: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
     try:
-        result = subprocess.run(cmd, shell=shell, check=True, capture_output=True, text=True)
+        result = subprocess.run(cmd, shell=shell, check=check, capture_output=True, text=True)
         print(f"✅ {description}: OK")
         return True
     except subprocess.CalledProcessError as e:
@@ -81,7 +81,6 @@ def main():
         "pytest~=8.3.4",
         "requests~=2.32.3",
         "javaobj-py3~=0.4.4",
-        # "Mailgun==0.1.0",  # Removed for now
     ]
 
     # Install in smaller batches to avoid issues
