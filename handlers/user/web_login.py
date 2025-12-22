@@ -63,6 +63,9 @@ async def web_login():
                     "error.jinja", error_message="Wrong password"
                 )
 
+        # Update country from IP if not set (for web login)
+        await utils.update_user_country_if_needed(player.id, request.remote_addr)
+
         response = await render_template(
             "success.jinja", success_message=Success("Login successful")
         )

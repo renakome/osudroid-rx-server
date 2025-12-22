@@ -6,7 +6,6 @@ from handlers.response import Failed, Success
 from argon2 import PasswordHasher
 import time
 import utils
-import geoip2.database
 from objects.player import Player
 
 ph = PasswordHasher()
@@ -64,20 +63,13 @@ async def login():
         p.avatar = f"{glob.config.host}/user/avatar/{p.id}.png"
     else:
         p.avatar = f"https://s.gravatar.com/avatar/{p.email_hash}"
-    try:
-        if p.country == None:
-            if os.path.exists("GeoLite2-Country.mmdb"):
-                with geoip2.database.Reader("GeoLite2-Country.mmdb") as reader:
-                    ip = request.remote_addr
-                    response = reader.country(ip)
-                    country = response.country.iso_code
-                    await glob.db.execute(
-                        "UPDATE users SET country = $1 WHERE id = $2",
-                        [country, p.id],
-                    )
-                    p.country = country # duh
-    except Exception as e:
-        logging.error(f"Failed to get country from ip: {e}")
+
+    # Update country from IP if not set
+    await utils.update_user_country_if_needed(p.id, request.remote_addr)
+    # Refresh player country from database
+    user_data = await glob.db.fetch("SELECT country FROM users WHERE id = $1", [p.id])
+    if user_data and user_data.get("country"):
+        p.country = user_data["country"]
     # returns long string of shit
     return Success(
         "{id} {uuid} {rank} {legacy_metric} {score} {pp} {acc} {username} {avatar}".format(

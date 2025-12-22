@@ -6,6 +6,7 @@ from osudroid_api_wrapper import ModList
 import time
 import json
 import os
+import utils
 
 bp = Blueprint("user_profile", __name__)
 
@@ -33,6 +34,13 @@ async def profile():
     p = glob.players.get(id=player_id)
     if not p:
         return await render_template("error.jinja", error_message="Player not found")
+
+    # Update country from IP if not set (for web access)
+    await utils.update_user_country_if_needed(p.id, request.remote_addr)
+    # Refresh player country from database
+    user_data = await glob.db.fetch("SELECT country FROM users WHERE id = $1", [p.id])
+    if user_data and user_data.get("country"):
+        p.country = user_data["country"]
 
     player_stats = p.stats.as_json
 
