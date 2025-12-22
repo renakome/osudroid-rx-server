@@ -7,21 +7,54 @@ import subprocess
 import sys
 import os
 
-def run_command(cmd, description):
+def run_command(cmd, description, shell=False):
     """Execute command and show result"""
-    print(f"🔧 {description}: {' '.join(cmd)}")
+    print(f"🔧 {description}: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
     try:
-        result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+        result = subprocess.run(cmd, shell=shell, check=True, capture_output=True, text=True)
         print(f"✅ {description}: OK")
         return True
     except subprocess.CalledProcessError as e:
         print(f"❌ {description}: FAILED")
-        print(f"Error: {e.stderr}")
+        if e.stderr:
+            print(f"Error: {e.stderr}")
         return False
+
+def install_rust():
+    """Install Rust using rustup"""
+    print("🦀 Installing Rust...")
+
+    # Check if rustc is already installed
+    if run_command(["rustc", "--version"], "Checking if Rust is installed", check=False):
+        print("✅ Rust is already installed")
+        return True
+
+    # Download and install rustup
+    print("📥 Downloading rustup installer...")
+
+    # Use curl to download rustup script (more reliable in cloud environments)
+    rustup_cmd = "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --profile minimal"
+    if run_command(rustup_cmd, "Installing Rust via rustup", shell=True):
+        # Add cargo to PATH
+        cargo_path = os.path.expanduser("~/.cargo/bin")
+        if cargo_path not in os.environ.get("PATH", ""):
+            os.environ["PATH"] = f"{cargo_path}:{os.environ.get('PATH', '')}"
+
+        # Verify installation
+        if run_command(["rustc", "--version"], "Verifying Rust installation"):
+            print("✅ Rust installed successfully!")
+            return True
+
+    print("❌ Failed to install Rust")
+    return False
 
 def main():
     print("📦 Installing osu!droid RX Server dependencies")
     print("=" * 55)
+
+    # Step 0: Install Rust if needed
+    if not install_rust():
+        print("⚠️  Warning: Rust installation failed, but continuing...")
 
     # Step 1: Install maturin first
     if not run_command([sys.executable, "-m", "pip", "install", "maturin>=1.0.0"],
