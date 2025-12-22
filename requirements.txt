@@ -17,7 +17,7 @@ geoip2==4.8.1
 pytest~=8.3.4
 requests~=2.32.3
 javaobj-py3~=0.4.4
-git+https://github.com/renakome/osudroid-api-wrapper.git@main
+git+https://github.com/renakome/osudroid-api-wrapper.git
 
 # DEPENDÊNCIAS ESPECIAIS - Instaladas pelo install_deps.py:
 # maturin>=1.0.0
