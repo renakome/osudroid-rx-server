@@ -7,11 +7,14 @@ import subprocess
 import sys
 import os
 
+
 def run_command(cmd, description, shell=False, check=True):
     """Execute command and show result"""
     print(f"🔧 {description}: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
     try:
-        result = subprocess.run(cmd, shell=shell, check=check, capture_output=True, text=True)
+        result = subprocess.run(
+            cmd, shell=shell, check=check, capture_output=True, text=True
+        )
         print(f"✅ {description}: OK")
         return True
     except subprocess.CalledProcessError as e:
@@ -20,12 +23,15 @@ def run_command(cmd, description, shell=False, check=True):
             print(f"Error: {e.stderr}")
         return False
 
+
 def install_rust():
     """Install Rust using rustup"""
     print("🦀 Installing Rust...")
 
     # Check if rustc is already installed
-    if run_command(["rustc", "--version"], "Checking if Rust is installed", check=False):
+    if run_command(
+        ["rustc", "--version"], "Checking if Rust is installed", check=False
+    ):
         print("✅ Rust is already installed")
         return True
 
@@ -48,6 +54,7 @@ def install_rust():
     print("❌ Failed to install Rust")
     return False
 
+
 def main():
     print("📦 Installing osu!droid RX Server dependencies")
     print("=" * 55)
@@ -57,13 +64,23 @@ def main():
         print("⚠️  Warning: Rust installation failed, but continuing...")
 
     # Step 1: Install maturin first
-    if not run_command([sys.executable, "-m", "pip", "install", "maturin>=1.0.0"],
-                      "Installing maturin (build tool)"):
+    if not run_command(
+        [sys.executable, "-m", "pip", "install", "maturin>=1.0.0"],
+        "Installing maturin (build tool)",
+    ):
         return False
 
     # Step 2: Install rosu-pp-py separately
-    if not run_command([sys.executable, "-m", "pip", "install", "git+https://github.com/unclem2/rosu-pp-py"],
-                      "Installing rosu-pp-py (PP calculator)"):
+    if not run_command(
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "git+https://github.com/unclem2/rosu-pp-py",
+        ],
+        "Installing rosu-pp-py (PP calculator)",
+    ):
         return False
 
     # Step 3: Install rest of dependencies (except rosu-pp-py)
@@ -88,15 +105,18 @@ def main():
     # Install in smaller batches to avoid issues
     batch_size = 5
     for i in range(0, len(deps_to_install), batch_size):
-        batch = deps_to_install[i:i+batch_size]
-        if not run_command([sys.executable, "-m", "pip", "install"] + batch,
-                          f"Installing batch {i//batch_size + 1} of dependencies"):
+        batch = deps_to_install[i : i + batch_size]
+        if not run_command(
+            [sys.executable, "-m", "pip", "install"] + batch,
+            f"Installing batch {i//batch_size + 1} of dependencies",
+        ):
             return False
 
     print("\n🎉 All dependencies installed successfully!")
     print("🚀 You can now run: python main.py")
 
     return True
+
 
 if __name__ == "__main__":
     success = main()
