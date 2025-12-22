@@ -42,27 +42,47 @@ async def password_recovery():
         recovery_token = utils.make_md5(f"{secrets.token_urlsafe(16)}{lost_user.id}")
         glob.rec_tokens[recovery_token] = lost_user.id
 
-        email = os.getenv("EMAIL")
-        password = os.getenv("EMAIL_PASSWORD")
-        smtp_server = "smtp.gmail.com"
-        smtp_port = 587  # smtp port, 587 for tls, 25 no tls, also 465 can be used
+        # Usar Mailgun API (GRÁTIS e sem DNS!)
+        mailgun_api_key = os.getenv("MAILGUN_API_KEY", "sua_api_key_mailgun_aqui")
+        mailgun_domain = os.getenv("MAILGUN_DOMAIN", "sandboxXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.mailgun.org")
 
-        message = MIMEMultipart()
-        message["From"] = email
-        message["To"] = receiver_email
-        message["Subject"] = "Password recovery"
-        message.attach(
-            MIMEText(
-                f"Hi, you requested a password recovery, recovery link: {glob.config.host}/user/password_recovery?type=change&token={recovery_token}",
-                "plain",
+        if mailgun_api_key and mailgun_api_key != "sua_api_key_mailgun_aqui":
+            # Usar Mailgun API
+            url = f"https://api.mailgun.net/v3/{mailgun_domain}/messages"
+            auth = ("api", mailgun_api_key)
+            data = {
+                "from": f"osu!droid Server <mailgun@{mailgun_domain}>",
+                "to": [receiver_email],
+                "subject": "Password recovery",
+                "text": f"Hi, you requested a password recovery, recovery link: {glob.config.host}/user/password_recovery?type=change&token={recovery_token}"
+            }
+
+            response = requests.post(url, auth=auth, data=data)
+            if response.status_code != 200:
+                return await render_template("error.jinja", error_message="Failed to send email")
+        else:
+            # Fallback para Gmail SMTP (se Mailgun não estiver configurado)
+            email = os.getenv("EMAIL")
+            password = os.getenv("EMAIL_PASSWORD")
+            smtp_server = "smtp.gmail.com"
+            smtp_port = 587
+
+            message = MIMEMultipart()
+            message["From"] = email
+            message["To"] = receiver_email
+            message["Subject"] = "Password recovery"
+            message.attach(
+                MIMEText(
+                    f"Hi, you requested a password recovery, recovery link: {glob.config.host}/user/password_recovery?type=change&token={recovery_token}",
+                    "plain",
+                )
             )
-        )
 
-        with smtplib.SMTP(smtp_server, smtp_port) as server:
-            server.starttls()
-            server.login(email, password)
-            server.sendmail(email, receiver_email, message.as_string())
-            server.quit()
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(email, password)
+                server.sendmail(email, receiver_email, message.as_string())
+                server.quit()
         return await render_template(
             "success.jinja", success_message="Recovery email sent"
         )
