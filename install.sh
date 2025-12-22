@@ -28,8 +28,8 @@ pip install git+https://github.com/unclem2/rosu-pp-py
 # Install remaining dependencies
 pip install aiohttp~=3.10.5 asyncpg coloredlogs==15.0.1 Hypercorn==0.17.3
 pip install python-dotenv==1.0.1 python-socketio~=5.11.4 Quart~=0.19.6
-pip install Werkzeug~=3.0.4 discord-webhook[async]==1.3.1 geoip2==4.8.1
-pip install pytest~=8.3.4 requests~=2.32.3 javaobj-py3~=0.4.4
+pip install quart-schema~=0.18.0 Werkzeug~=3.0.4 discord-webhook[async]==1.3.1
+pip install geoip2==4.8.1 pytest~=8.3.4 requests~=2.32.3 javaobj-py3~=0.4.4
 
 echo ""
 echo "🎉 All dependencies installed successfully!"

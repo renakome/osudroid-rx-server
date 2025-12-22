@@ -75,6 +75,7 @@ def main():
         "python-dotenv==1.0.1",
         "python-socketio~=5.11.4",
         "Quart~=0.19.6",
+        "quart-schema~=0.18.0",
         "Werkzeug~=3.0.4",
         "discord-webhook[async]==1.3.1",
         "geoip2==4.8.1",
