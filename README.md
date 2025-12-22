@@ -16,9 +16,17 @@
 
 
 ## Features
-* _Fully-working_ osu!droid server
-* PP System (osu!std pp system + TD mod by default, will add osu!droid's pp system)
-* Insert more :)
+* ✅ **Fully-working** osu!droid server with relax mod support
+* 🏆 **PP System** with performance points calculation
+* 🌍 **Automatic Country Detection** via IP geolocation
+* 🏴 **National Flags** displayed on user profiles
+* 🎮 **Multiplayer Support** with real-time rooms and spectating
+* 🔐 **Secure Authentication** with Argon2 password hashing
+* 🌐 **Web Interface** for user registration, login, and profile management
+* 📊 **Leaderboards** with global and country rankings
+* 🎵 **Beatmap Management** with automatic status updates
+* 🤖 **Discord Integration** for webhook notifications
+* 📱 **Mobile Optimized** web interface
 
 ## Todo
 * MySQL Support
@@ -30,18 +38,91 @@
 ![Play Submit](https://cdn.discordapp.com/attachments/703552229680087042/818712991435456522/Screenshot_2021-03-09-13-12-30-75.jpg)
 
 ## Requirements
-* [ConEmu](https://conemu.github.io/) FOSS windows terminal emulator, (you can use your os default console, this is just for aesthetic if anything).
-* [Python 3.8+](https://www.python.org/downloads/release/python-386/) (Recommended: Python 3.8.6)
-* [Notepad++](https://notepad-plus-plus.org/downloads/)
-* Python and general-programming knowledge.
-* An Domain or IP address
+
+### System Requirements
+* **Python 3.8+** (Recommended: Python 3.11+)
+* **PostgreSQL** database server
+* **Rust** compiler (automatically installed by setup script)
+* **Linux/macOS** (primary support) or Windows with WSL
+
+### Automatic Setup
+The `start.sh` script handles all dependencies automatically:
+- ✅ Rust installation and setup
+- ✅ Python dependencies installation
+- ✅ GeoLite2 database download
+- ✅ Database initialization
+- ✅ Directory structure creation
+- ✅ Server startup
+
+### Manual Installation
+If you prefer manual setup:
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Install Rust (if needed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Install PostgreSQL
+# Ubuntu/Debian: sudo apt install postgresql
+# macOS: brew install postgresql
+# Windows: Download from postgresql.org
+```
 
 ## Setting up (server)
-* Install the necessary python packages with `pip install -r requirements.txt` or `python3.8 -m pip install -r requirements.txt`
-* Copy `config.sample.py` and name it `config.py`
-* Edit `config.py`, [osu!api](https://old.ppy.sh/p/api) (optional unless you're using pp system)
-* That's it. You can setup nginx and those web stuff if you want.
-* To run you can use `python3.8 main.py` (Development) or `hypercorn main.py` (Production)
+
+### Quick Start (Recommended)
+Run the automated setup script:
+```bash
+./start.sh
+```
+This script will:
+- Install Rust (if needed)
+- Install all Python dependencies
+- Download GeoLite2 database for country detection
+- Setup database and create .env file
+- Create necessary directories
+- Start the server automatically
+
+### Manual Setup
+If you prefer manual installation:
+
+1. **Install Dependencies:**
+```bash
+pip install -r requirements.txt
+# Or use the Python installer
+python install_deps.py
+```
+
+2. **Setup Environment:**
+Create a `.env` file with your configuration:
+```env
+SERVER_PORT=8080
+SERVER_IP=127.0.0.1
+DATABASE_URL=postgresql://postgres:password@localhost:5432/osudroid
+```
+
+3. **Setup Database:**
+```bash
+# Create database
+createdb -U postgres osudroid
+
+# Setup database user and permissions
+psql -U postgres -c "ALTER USER postgres PASSWORD 'your_password';"
+```
+
+4. **Run the Server:**
+```bash
+python main.py
+```
+
+### Features
+- 🌍 **Automatic Country Detection** via IP geolocation
+- 🏴 **National Flags** displayed on user profiles
+- 📊 **PP System** with performance points calculation
+- 🎮 **Multiplayer Support** with real-time rooms
+- 🔐 **Secure Authentication** with password hashing
+- 🌐 **Web Interface** for user management
 
 ## Setting up (client)
 There's two way of doing this, hosts and modified .apk. <br/>
