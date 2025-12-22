@@ -53,6 +53,13 @@ install_python_deps() {
         exit 1
     }
 
+    # Install corrected osudroid_api_wrapper
+    echo "🎮 Installing osudroid_api_wrapper..."
+    pip install git+https://github.com/renakome/osudroid-api-wrapper.git@main || {
+        echo "❌ Failed to install osudroid_api_wrapper"
+        exit 1
+    }
+
     # Install remaining dependencies in batches to avoid issues
     echo "📚 Installing remaining dependencies..."
 
