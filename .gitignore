@@ -139,6 +139,16 @@ dmypy.json
 data/avatar/6.png
 data/avatar/1.png
 
+# Rust/Cargo
+.cargo/
+target/
+
+# Build artifacts
+*.zip
+*.tar.gz
+dist/
+build/
+
 tets.py
 1
 nikabot_2024-08-28_230627.sql
