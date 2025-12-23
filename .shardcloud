@@ -1,8 +1,0 @@
-DISPLAY_NAME=OsuZenith
-MAIN=main.py
-MEMORY=1024
-VERSION=recommended
-LANGUAGE=python
-CUSTOM_COMMAND=chmod +x start.sh && ./start.sh
-SUBDOMAIN=osuzenith
-APPID=d649c4f6-6a4f-47ed-9a87-500ebdad61f0
