@@ -44,7 +44,9 @@ async def password_recovery():
 
         # Use Mailgun API (FREE and no DNS required!)
         mailgun_api_key = os.getenv("MAILGUN_API_KEY", "your_mailgun_api_key_here")
-        mailgun_domain = os.getenv("MAILGUN_DOMAIN", "sandboxXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.mailgun.org")
+        mailgun_domain = os.getenv(
+            "MAILGUN_DOMAIN", "sandboxXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.mailgun.org"
+        )
 
         if mailgun_api_key and mailgun_api_key != "your_mailgun_api_key_here":
             # Use Mailgun API
@@ -54,12 +56,14 @@ async def password_recovery():
                 "from": f"osu!droid Server <mailgun@{mailgun_domain}>",
                 "to": [receiver_email],
                 "subject": "Password recovery",
-                "text": f"Hi, you requested a password recovery, recovery link: {glob.config.host}/user/password_recovery?type=change&token={recovery_token}"
+                "text": f"Hi, you requested a password recovery, recovery link: {glob.config.host}/user/password_recovery?type=change&token={recovery_token}",
             }
 
             response = requests.post(url, auth=auth, data=data)
             if response.status_code != 200:
-                return await render_template("error.jinja", error_message="Failed to send email")
+                return await render_template(
+                    "error.jinja", error_message="Failed to send email"
+                )
         else:
             # Fallback to Gmail SMTP (if Mailgun is not configured)
             email = os.getenv("EMAIL")
