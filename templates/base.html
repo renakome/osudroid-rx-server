@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Zenith{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="static/banner.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col">
+    <div class="navbar bg-base-200 shadow-lg sticky top-0 z-50">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/user/leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a></li>
+                    <li>
+                        <a>Profile</a>
+                        <ul class="p-2">
+                            <li><a href="/user/profile.php">My Profile</a></li>
+                            <li><a href="/user/account/settings">Settings</a></li>
+                            <li><a href="/user/logout.php">Logout</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/user/web_login.php">Login</a></li>
+                    <li><a href="/api/register.php">Register</a></li>
+                </ul>
+            </div>
+            <a href="/" class="btn btn-ghost text-xl gap-2">
+                <img src="static/banner.png" class="w-8 h-8" alt="Logo">
+                Zenith
+            </a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1 gap-2">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/user/leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a></li>
+                <li>
+                    <details>
+                        <summary>Profile</summary>
+                        <ul class="p-2 bg-base-200 rounded-t-none z-50">
+                            <li><a href="/user/profile.php">My Profile</a></li>
+                            <li><a href="/user/account/settings">Settings</a></li>
+                            <li><a href="/user/logout.php">Logout</a></li>
+                        </ul>
+                    </details>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-end gap-2">
+            <a href="/user/web_login.php" class="btn btn-ghost btn-sm">Login</a>
+            <a href="/api/register.php" class="btn btn-primary btn-sm">Register</a>
+        </div>
+    </div>
+
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer footer-center p-10 bg-base-300 text-base-content">
+        <aside>
+            <img src="static/banner.png" class="w-12 h-12 mb-2" alt="Logo">
+            <p class="font-bold">Zenith osu!droid Server</p> 
+            <p>Copyright © 2024 - All right reserved</p>
+        </aside> 
+        <nav>
+            <div class="grid grid-flow-col gap-4">
+                <a href="https://discord.gg/syd5GjFk5Q" target="_blank" class="text-2xl hover:text-primary transition-colors"><i class="fab fa-discord"></i></a>
+                <a href="#" class="text-2xl hover:text-primary transition-colors"><i class="fab fa-github"></i></a>
+            </div>
+        </nav>
+    </footer>
+</body>
+</html>

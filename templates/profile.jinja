@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Player Profile{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Profile Header Card -->
+    <div class="card lg:card-side bg-base-200 shadow-xl mb-8 overflow-hidden border border-base-300">
+        <figure class="p-8 bg-base-300">
+            <div class="avatar">
+                <div class="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                    <img src="{{ avatar_url }}" alt="Avatar" />
+                </div>
+            </div>
+        </figure>
+        <div class="card-body">
+            <div class="flex flex-col md:flex-row md:items-center gap-4">
+                <h2 class="card-title text-3xl font-bold text-primary">{{ player.username }}</h2>
+                <img class="w-8 h-6 rounded shadow-sm"
+                     src="https://flagsapi.com/{{ player.country }}/flat/64.png"
+                     alt="Flag of {{ player.country }}">
+            </div>
+            
+            <div class="stats stats-vertical lg:stats-horizontal bg-base-100 shadow mt-4">
+                <div class="stat">
+                    <div class="stat-title">Global Rank</div>
+                    <div class="stat-value text-secondary text-2xl">#{{ player_stats.pp_rank }}</div>
+                    <div class="stat-desc">Score: #{{ player_stats.score_rank }}</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Country Rank</div>
+                    <div class="stat-value text-accent text-2xl">#{{ player_stats.country_pp_rank }}</div>
+                    <div class="stat-desc">Score: #{{ player_stats.country_score_rank }}</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Performance</div>
+                    <div class="stat-value text-primary text-2xl">{{ player_stats.pp }}pp</div>
+                    <div class="stat-desc">Acc: {{ player_stats.acc }}%</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Level</div>
+                    <div class="stat-value text-2xl">{{ level }}</div>
+                    <div class="stat-desc">Plays: {{ player_stats.plays }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scores Tabs -->
+    <div role="tablist" class="tabs tabs-lifted tabs-lg">
+        <input type="radio" name="score_tabs" role="tab" class="tab" aria-label="Top Scores" checked />
+        <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 overflow-x-auto">
+            <table class="table table-zebra w-full">
+                <thead>
+                    <tr>
+                        <th>Map</th>
+                        <th class="text-center">Mods</th>
+                        <th class="text-center">PP</th>
+                        <th class="text-center">Acc</th>
+                        <th class="text-center">Combo</th>
+                        <th class="text-center">Miss</th>
+                        <th class="text-right">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for score in top_scores %}
+                    <tr class="hover">
+                        <td class="max-w-xs truncate"><a href="{{ score.link }}" class="link link-hover text-primary font-medium">{{ score.bmap.full }}</a></td>
+                        <td class="text-center"><span class="badge badge-outline badge-sm">{{ score.mods.as_standard_mods }}</span></td>
+                        <td class="text-center font-bold">{{ score.pp.calc_pp|round(2) }}</td>
+                        <td class="text-center">{{ score.acc|round(2) }}%</td>
+                        <td class="text-center">{{ score.max_combo }}x</td>
+                        <td class="text-center text-error">{{ score.hmiss }}</td>
+                        <td class="text-right text-xs opacity-70"><script>document.write(formatUnixTimestamp({{ score.date }}))</script></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <input type="radio" name="score_tabs" role="tab" class="tab" aria-label="Recent Scores" />
+        <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 overflow-x-auto">
+            <table class="table table-zebra w-full">
+                <thead>
+                    <tr>
+                        <th>Map</th>
+                        <th class="text-center">Mods</th>
+                        <th class="text-center">PP</th>
+                        <th class="text-center">Acc</th>
+                        <th class="text-center">Combo</th>
+                        <th class="text-center">Miss</th>
+                        <th class="text-right">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for score in recent_scores %}
+                    <tr class="hover">
+                        <td class="max-w-xs truncate"><a href="{{ score.link }}" class="link link-hover text-primary font-medium">{{ score.bmap.full }}</a></td>
+                        <td class="text-center"><span class="badge badge-outline badge-sm">{{ score.mods.as_standard_mods }}</span></td>
+                        <td class="text-center font-bold">{{ score.pp.calc_pp|round(2) }}</td>
+                        <td class="text-center">{{ score.acc|round(2) }}%</td>
+                        <td class="text-center">{{ score.max_combo }}x</td>
+                        <td class="text-center text-error">{{ score.hmiss }}</td>
+                        <td class="text-right text-xs opacity-70"><script>document.write(formatUnixTimestamp({{ score.date }}))</script></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function formatUnixTimestamp(ts) {
+  const date = new Date(ts * 1000); // convert seconds → ms
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="hero min-h-[80vh] bg-base-100 relative overflow-hidden">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+        {% for i in range(20) %}
+        <div class="absolute rounded-full bg-primary animate-pulse" 
+             style="left: {{ range(0, 100) | random }}%; top: {{ range(0, 100) | random }}%; width: {{ range(5, 15) | random }}px; height: {{ range(5, 15) | random }}px; animation-delay: {{ range(0, 5) | random }}s; animation-duration: {{ range(3, 7) | random }}s;">
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="hero-content text-center z-10">
+        <div class="max-w-md">
+            <div class="avatar mb-8">
+                <div class="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-2xl">
+                    <img src="static/banner.png" alt="Logo" />
+                </div>
+            </div>
+            <h1 class="text-5xl font-bold text-primary mb-4">{{ title }}</h1>
+            <p class="py-6 text-lg opacity-80">Experience the ultimate osu!droid private server with a dedicated community and competitive rankings.</p>
+            
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="stat bg-base-200 rounded-box p-2">
+                    <div class="stat-title text-xs">Players</div>
+                    <div class="stat-value text-primary text-xl">{{ players }}</div>
+                </div>
+                <div class="stat bg-base-200 rounded-box p-2">
+                    <div class="stat-title text-xs">Online</div>
+                    <div class="stat-value text-secondary text-xl">{{ online }}</div>
+                </div>
+                <div class="stat bg-base-200 rounded-box p-2">
+                    <div class="stat-title text-xs">Version</div>
+                    <div class="stat-value text-accent text-xl">{{ version }}</div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ download_link }}" class="btn btn-primary btn-lg shadow-lg">
+                    <i class="fas fa-download"></i> Download APK
+                </a>
+                <a href="https://discord.gg/syd5GjFk5Q" target="_blank" class="btn btn-outline btn-lg border-[#5865F2] text-[#5865F2] hover:bg-[#5865F2] hover:border-[#5865F2]">
+                    <i class="fab fa-discord"></i> Discord
+                </a>
+            </div>
+
+            <div class="mt-10 collapse collapse-arrow bg-base-200">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-sm font-medium">
+                    <i class="fas fa-list mr-2"></i> View Changelog
+                </div>
+                <div class="collapse-content text-left text-sm"> 
+                    <p>{{ changelog }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

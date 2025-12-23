@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[70vh] px-4">
+    <div class="card w-full max-w-md bg-base-200 shadow-2xl border border-base-300">
+        <div class="card-body">
+            <h2 class="card-title text-3xl font-bold text-center block mb-6 text-primary">Login</h2>
+
+            {% if error_message %}
+                <div class="alert alert-error mb-6 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>{{ error_message }}</span>
+                </div>
+            {% endif %}
+
+            <form method="post" novalidate class="space-y-4">
+                <div class="form-control">
+                    <label class="label" for="username">
+                        <span class="label-text font-semibold">Username</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter username"
+                        class="input input-bordered focus:input-primary"
+                        required
+                        autocomplete="username"
+                    />
+                    <label class="label">
+                        <span class="label-text-alt opacity-60">3-20 characters, letters, numbers, and underscores</span>
+                    </label>
+                </div>
+
+                <div class="form-control">
+                    <label class="label" for="password">
+                        <span class="label-text font-semibold">Password</span>
+                    </label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        class="input input-bordered focus:input-primary"
+                        required
+                        autocomplete="current-password"
+                    />
+                    <label class="label">
+                        <span class="label-text-alt opacity-60">At least 6 characters</span>
+                    </label>
+                </div>
+
+                <div class="form-control mt-6">
+                    <button type="submit" class="btn btn-primary btn-block shadow-lg">Login</button>
+                </div>
+            </form>
+
+            <div class="divider">OR</div>
+
+            <div class="text-center">
+                <a href="/user/password_recovery" class="link link-hover text-sm opacity-70">Forgot password?</a>
+            </div>
+            <div class="text-center mt-2">
+                <span class="text-sm opacity-70">Don't have an account?</span>
+                <a href="/api/register.php" class="link link-primary font-semibold text-sm">Register now</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
