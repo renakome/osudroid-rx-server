@@ -1,0 +1,36 @@
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Vercel local project metadata
+.vercel/
+
+# Python cache/build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Node/front-end cache artifacts, caso use ferramentas extras depois
+node_modules/
+.cache/
+.next/
+out/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*~
+.vscode/
+.idea/

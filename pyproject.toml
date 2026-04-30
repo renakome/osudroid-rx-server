@@ -1,0 +1,9 @@
+[project]
+name = "osuzenith-frontend"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+  "Flask==3.1.2",
+  "requests==2.32.3",
+  "python-dotenv==1.0.1",
+]

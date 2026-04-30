@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Change Password | OsuZenith{% endblock %}
+{% block content %}
+<style>
+  .recovery-panel {
+    max-width: 460px;
+    margin: 40px auto;
+    padding: 28px;
+  }
+
+  .recovery-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .recovery-panel h1 {
+    margin: 0 0 22px;
+    text-align: center;
+    font-size: 1.9rem;
+    letter-spacing: -0.04em;
+  }
+
+  .recovery-panel form {
+    display: grid;
+    gap: 13px;
+  }
+</style>
+<section class="recovery-panel">
+    <h1>Change Password</h1>
+    <form method="post" action="/user/password_recovery?type=change">
+        <input type="hidden" name="token" value="{{ token }}">
+        <label for="password">New Password</label>
+        <input type="password" id="password" name="password" class="form-control" required>
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+        <button type="submit" class="btn btn-primary">Change Password</button>
+    </form>
+</section>
+{% endblock %}

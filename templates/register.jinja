@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Register | OsuZenith{% endblock %}
+
+{% block content %}
+<style>
+  .form-container {
+    max-width: 430px;
+    width: min(92vw, 430px);
+    padding: 30px 26px;
+    margin: 40px auto;
+  }
+
+  .form-container > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .form-container h1 {
+    text-align: center;
+    margin: 0 0 24px;
+    font-size: 2rem;
+    letter-spacing: -0.045em;
+  }
+
+  .form-container form {
+    display: grid;
+    gap: 12px;
+  }
+
+  .form-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: -6px;
+    margin-bottom: 2px;
+    text-align: center;
+  }
+
+  .form-container input[type="submit"] {
+    width: 100%;
+    margin-top: 8px;
+  }
+</style>
+
+<div class="form-container" role="main" aria-labelledby="register-title">
+  <h1 id="register-title">Create account</h1>
+  <form method="post" action="/api/register.php" novalidate>
+    <label for="username">Username</label>
+    <input
+      type="text"
+      id="username"
+      name="username"
+      class="username-select"
+      required
+      minlength="3"
+      maxlength="20"
+      pattern="^[a-zA-Z0-9_]+$"
+      aria-describedby="username-note"
+      autocomplete="username"
+      placeholder="Enter username"
+    />
+    <div id="username-note" class="form-note">3-20 characters, letters, numbers, and underscores only</div>
+
+    <label for="password">Password</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      required
+      minlength="6"
+      aria-describedby="password-note"
+      autocomplete="new-password"
+      placeholder="Enter password"
+    />
+    <div id="password-note" class="form-note">At least 6 characters</div>
+
+    <label for="email">Email</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      required
+      autocomplete="email"
+      placeholder="Enter email"
+    />
+
+    <input type="submit" value="Register" />
+  </form>
+</div>
+{% endblock %}

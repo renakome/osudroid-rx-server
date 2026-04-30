@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}OsuZenith{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg: #05070b;
+            --bg-glass: rgba(255, 255, 255, 0.055);
+            --surface: linear-gradient(180deg, rgba(24, 31, 43, 0.94), rgba(8, 11, 17, 0.94));
+            --line: rgba(255, 255, 255, 0.12);
+            --text: #f5f8ff;
+            --muted: #9daabc;
+            --muted-strong: #c1ccda;
+            --accent: #7baaff;
+            --accent-glow: rgba(123, 170, 255, 0.30);
+            --success: #72dfb5;
+            --danger: #ff8e9f;
+            --gold: #ffd66f;
+            --silver: #dbe4f0;
+            --bronze: #d99a66;
+            --shadow: 0 24px 80px rgba(0, 0, 0, 0.44);
+            --radius-xl: 30px;
+            --content-width: 1180px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            color-scheme: dark;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 50% -12%, rgba(127, 168, 255, 0.22), transparent 32%),
+                radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.085), transparent 24%),
+                radial-gradient(circle at 86% 6%, rgba(85, 122, 189, 0.22), transparent 24%),
+                linear-gradient(180deg, #0b1018 0%, #07090d 58%, #030406 100%);
+            color: var(--text);
+            font-family: "Manrope", "Segoe UI", sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::before {
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.09), transparent 24%),
+                linear-gradient(320deg, rgba(92, 118, 170, 0.09), transparent 25%);
+            opacity: 0.72;
+        }
+
+        body::after {
+            background:
+                radial-gradient(circle at 18% 26%, rgba(123, 170, 255, 0.14), transparent 18%),
+                radial-gradient(circle at 82% 72%, rgba(255, 255, 255, 0.08), transparent 20%);
+            filter: blur(20px);
+            animation: pageGlowDrift 18s ease-in-out infinite alternate;
+            opacity: 0.85;
+        }
+
+        a { color: inherit; }
+
+        input,
+        textarea,
+        select,
+        .username,
+        .username-select,
+        .player-name {
+            user-select: text;
+        }
+
+        ::selection {
+            background: rgba(123, 170, 255, 0.36);
+            color: #ffffff;
+        }
+
+        .shell {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(22px) saturate(160%);
+            background: rgba(5, 7, 11, 0.62);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .site-header-inner {
+            width: min(calc(100% - 32px), var(--content-width));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 16px 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            transition: transform 180ms ease, filter 180ms ease;
+        }
+
+        .brand:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+
+        .brand-photo {
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            flex-shrink: 0;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        
+
+        .brand-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-title {
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+        }
+
+        .brand-subtitle {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+        }
+
+        .nav-toggle {
+            display: none;
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: var(--bg-glass);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 11px 15px;
+            border-radius: 999px;
+            text-decoration: none;
+            color: var(--muted);
+            border: 1px solid transparent;
+            transition:
+                transform 180ms ease,
+                color 180ms ease,
+                background-color 180ms ease,
+                border-color 180ms ease,
+                box-shadow 180ms ease;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus-visible {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.09);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.accent-link {
+            color: var(--text);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+            border-color: rgba(123, 167, 255, 0.28);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        }
+
+        .page {
+            width: min(calc(100% - 32px), var(--content-width));
+            margin: 0 auto;
+            padding: 38px 0 72px;
+            flex: 1;
+            animation: fadeInUp 520ms cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .surface-card,
+        .form-container,
+        .login-container,
+        .profile-card,
+        .leaderboard-card,
+        .scores-wrapper,
+        .recovery-panel,
+        .content > .error,
+        .content > .success {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px) saturate(140%);
+        }
+
+        .surface-card,
+        .form-container,
+        .login-container,
+        .profile-card,
+        .leaderboard-card,
+        .scores-wrapper,
+        .recovery-panel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .surface-card::before,
+        .form-container::before,
+        .login-container::before,
+        .profile-card::before,
+        .leaderboard-card::before,
+        .scores-wrapper::before,
+        .recovery-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.10), transparent 26%),
+                radial-gradient(circle at top right, rgba(123, 170, 255, 0.14), transparent 34%);
+            opacity: 0.86;
+        }
+
+        .content > .error,
+        .content > .success {
+            max-width: 720px;
+            margin: 6vh auto 0;
+            padding: 22px 24px;
+        }
+
+        .content > .error,
+        .error {
+            border-color: rgba(255, 142, 159, 0.24);
+            color: #ffd8df;
+        }
+
+        .content > .success {
+            border-color: rgba(114, 223, 181, 0.24);
+            color: #dcfff0;
+        }
+
+        button,
+        input[type="submit"] {
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        button,
+        input[type="submit"],
+        .button-primary {
+            min-height: 48px;
+            padding: 12px 18px;
+            border-radius: 16px;
+            color: var(--text);
+            background:
+                linear-gradient(180deg, rgba(138, 177, 255, 0.32), rgba(77, 115, 190, 0.32)),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+            border: 1px solid rgba(132, 170, 255, 0.28);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                0 12px 36px rgba(52, 92, 176, 0.22);
+            transition:
+                transform 180ms ease,
+                box-shadow 180ms ease,
+                filter 180ms ease,
+                border-color 180ms ease;
+        }
+
+        button:hover,
+        input[type="submit"]:hover,
+        .button-primary:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.24),
+                0 18px 40px rgba(52, 92, 176, 0.3);
+            filter: brightness(1.04);
+        }
+
+        button:disabled,
+        input[type="submit"]:disabled,
+        .is-disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+            transform: none;
+            box-shadow: none;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            outline: none;
+            transition:
+                border-color 160ms ease,
+                background-color 160ms ease,
+                box-shadow 160ms ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #7e8a9c;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: rgba(120, 169, 255, 0.56);
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 0 0 6px rgba(120, 169, 255, 0.12);
+        }
+
+        label {
+            color: var(--muted-strong);
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 18px, 0) scale(0.992);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+        }
+
+        @keyframes pageGlowDrift {
+            from { transform: translate3d(-1.4%, -1%, 0) scale(1); }
+            to { transform: translate3d(1.4%, 1%, 0) scale(1.04); }
+        }
+
+        @keyframes orbSweep {
+            0%, 58%, 100% { transform: translateX(-80%) rotate(-18deg); opacity: 0; }
+            68% { opacity: 0.95; }
+            82% { transform: translateX(165%) rotate(-18deg); opacity: 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .site-header-inner { align-items: flex-start; }
+
+            .nav-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .site-nav {
+                position: absolute;
+                top: calc(100% + 10px);
+                right: 16px;
+                left: 16px;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 14px;
+                border-radius: 22px;
+                border: 1px solid var(--line);
+                background: rgba(10, 14, 20, 0.94);
+                backdrop-filter: blur(18px);
+                box-shadow: var(--shadow);
+            }
+
+            .site-nav.is-open {
+                display: flex;
+                animation: fadeInUp 220ms ease;
+            }
+
+            .nav-link { width: 100%; }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                width: min(calc(100% - 20px), var(--content-width));
+                padding-top: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <header class="site-header">
+            <div class="site-header-inner">
+                <a class="brand" href="/" aria-label="OsuZenith home">
+                    <img class="brand-photo" src="/static/brand-photo.png" alt="OsuZenith" />
+                    <span class="brand-copy">
+                        <span class="brand-title">OsuZenith</span>
+                        <span class="brand-subtitle">Relax Server</span>
+                    </span>
+                </a>
+                <button class="nav-toggle" type="button" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="site-nav" aria-label="Primary">
+                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/user/leaderboard">Leaderboard</a>
+                    <a class="nav-link" href="/user/profile.php">Profile</a>
+                    <a class="nav-link" href="/user/account/settings">Settings</a>
+                    <a class="nav-link" href="/user/web_login.php">Login</a>
+                    <a class="nav-link accent-link" href="/api/register.php">Register</a>
+                    <a class="nav-link" href="/user/logout.php">Logout</a>
+                </nav>
+            </div>
+        </header>
+        <main class="page">
+            <div class="content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    <script>
+        const navToggle = document.querySelector(".nav-toggle");
+        const nav = document.querySelector(".site-nav");
+
+        if (navToggle && nav) {
+            navToggle.addEventListener("click", () => {
+                const isOpen = nav.classList.toggle("is-open");
+                navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            });
+
+            window.addEventListener("resize", () => {
+                if (window.innerWidth > 900) {
+                    nav.classList.remove("is-open");
+                    navToggle.setAttribute("aria-expanded", "false");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
